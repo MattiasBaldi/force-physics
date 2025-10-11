@@ -33,7 +33,7 @@ export function World() {
     color: "black",
 
     // Physics controls
-    PhysicsDebug: !useDebug(),
+    PhysicsDebug: useDebug(),
     restitution: {
       value: 0.8,
       min: 0,
