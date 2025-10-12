@@ -1,19 +1,26 @@
 import { RigidBody } from "@react-three/rapier";
-import { CustomCollider } from "./CustomCollider.tsx";
+import { CustomPlaneCollider } from "./CustomPlaneCollider.tsx";
 import { useControls } from "leva";
 import { useMemo } from "react";
 
-export type Props = {
-  scale: number;
-};
-
-export function CollisionBoxPlanes(props: Props) {
-  const scaleConversion = 0.1;
+export function CollisionBox() {
+  const controls = useControls(
+    "box",
+    {
+      scale: {
+        value: 2,
+        min: 0,
+        max: 10,
+        step: 0.01,
+      },
+    },
+    { collapsed: true }
+  );
 
   const { scaledDimensions, positions } = useMemo(() => {
-    const scale = props.scale * scaleConversion;
+    const scale = controls.scale;
     return {
-      scaledDimensions: [5 * scale, 0.001 * scale, 5 * scale] as [
+      scaledDimensions: [6 * scale, 0.5 * scale, 5 * scale] as [
         number,
         number,
         number
@@ -27,36 +34,36 @@ export function CollisionBoxPlanes(props: Props) {
         right: [5 * scale, 0, 0] as [number, number, number],
       },
     };
-  }, [props.scale]);
+  }, [controls.scale]);
 
   return (
     <RigidBody type="fixed">
-      <CustomCollider
+      <CustomPlaneCollider
         scale={scaledDimensions}
         position={positions.bottom}
         rotation={[0, 0, 0]}
       />
-      <CustomCollider
+      <CustomPlaneCollider
         scale={scaledDimensions}
         position={positions.top}
         rotation={[Math.PI, 0, 0]}
       />
-      <CustomCollider
+      <CustomPlaneCollider
         scale={scaledDimensions}
         position={positions.back}
         rotation={[Math.PI / 2, 0, 0]}
       />
-      <CustomCollider
+      <CustomPlaneCollider
         scale={scaledDimensions}
         position={positions.front}
         rotation={[-Math.PI / 2, 0, 0]}
       />
-      <CustomCollider
+      <CustomPlaneCollider
         scale={scaledDimensions}
         position={positions.left}
         rotation={[0, 0, Math.PI / 2]}
       />
-      <CustomCollider
+      <CustomPlaneCollider
         scale={scaledDimensions}
         position={positions.right}
         rotation={[0, 0, -Math.PI / 2]}

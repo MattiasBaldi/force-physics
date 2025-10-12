@@ -6,7 +6,7 @@ export type CustomColliderProps = {
   position: number[];
 };
 
-export function CustomCollider({
+export function CustomPlaneCollider({
   scale,
   rotation,
   position,
