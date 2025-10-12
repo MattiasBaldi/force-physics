@@ -1,18 +1,16 @@
-import { useState } from "react";
-import { useNormalizedMousePosition } from "../hooks/useNormalizedMousePosition";
-
-export type Position = {
-  x: number;
-  y: number;
-  z: number;
-};
+import { useRaycaster } from "../hooks/useRaycaster";
 
 export function CursorBall() {
-  const { mousePosition, setMousePosition } = useNormalizedMousePosition();
-  const [position, setPosition] = useState<Position>({ x: 0, y: 0, z: 0 });
+  const { worldSpacePosition } = useRaycaster();
 
   return (
-    <mesh position={[mousePosition.x, mousePosition.y, 0]}>
+    <mesh
+      position={[
+        worldSpacePosition.x,
+        worldSpacePosition.y,
+        worldSpacePosition.z,
+      ]}
+    >
       <sphereGeometry />
       <meshBasicMaterial color="red" />
     </mesh>

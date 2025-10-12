@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export type MousePosition = {
   x: number;
@@ -6,24 +6,49 @@ export type MousePosition = {
 };
 
 export function useNormalizedMousePosition() {
+  const [normalizedMousePosition, setNormalizedMousePosition] =
+    useState<MousePosition>({
+      x: 0,
+      y: 0,
+    });
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
   });
 
+  // Store the last mouse position
+  const lastMousePosition = useRef<MousePosition>({ x: 0, y: 0 });
+
   const handleMouseMove = (event: MouseEvent) => {
-    setMousePosition({
-      x: event.clientX - window.innerWidth / 2, // Normalize
-      y: -(event.clientY - window.innerHeight / 2), // Normalize and invert Y
+    const pos = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+    setMousePosition(pos);
+    lastMousePosition.current = pos;
+
+    setNormalizedMousePosition({
+      x: (pos.x / window.innerWidth) * 2 - 1,
+      y: -((pos.y / window.innerHeight) * 2 - 1),
+    });
+  };
+
+  const handleWheel = () => {
+    const pos = lastMousePosition.current;
+    setNormalizedMousePosition({
+      x: (pos.x / window.innerWidth) * 2 - 1,
+      y: -((pos.y / window.innerHeight) * 2 - 1),
     });
   };
 
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("wheel", handleWheel);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("wheel", handleWheel);
     };
   }, []);
 
-  return { mousePosition, setMousePosition };
+  return { normalizedMousePosition, setNormalizedMousePosition };
 }

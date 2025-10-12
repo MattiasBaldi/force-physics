@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
-import { useNormalizedMousePosition } from "./useNormalizedMousePosition";
-import { useNormalizedCameraPosition } from "./useCameraPosition";
 import { MathUtils } from "three";
 import { useControls } from "leva";
+import { useRaycaster } from "./useRaycaster";
 
 export type ForceProps = {
   ref: React.RefObject<null>;
@@ -10,19 +9,18 @@ export type ForceProps = {
 };
 
 export function useCursorForce({ ref, throttle = 0 }: ForceProps) {
-  const { mousePosition, setMousePosition } = useNormalizedMousePosition();
-  const { cameraPosition, setCameraPosition } = useNormalizedCameraPosition();
+  const { worldSpacePosition } = useRaycaster();
   const throttleRef = useRef<number>(throttle);
 
   const controls = useControls("instances", {
     acceleration: {
-      value: 10,
+      value: 50,
       min: 0,
       max: 50,
       step: 0.01,
     },
     maxForce: {
-      value: 100,
+      value: 300,
       min: 0,
       max: 500,
       step: 0.1,
@@ -40,20 +38,20 @@ export function useCursorForce({ ref, throttle = 0 }: ForceProps) {
   );
 
   const applyForce = useCallback(() => {
-    if (ref.current) {
+    if (ref.current && Array.isArray(ref.current)) {
       const force = {
         x: MathUtils.clamp(
-          mousePosition.x * controls.acceleration,
+          worldSpacePosition.x * controls.acceleration,
           -controls.maxForce,
           controls.maxForce
         ),
         y: MathUtils.clamp(
-          mousePosition.y * controls.acceleration,
+          worldSpacePosition.y * controls.acceleration,
           -controls.maxForce,
           controls.maxForce
         ),
         z: MathUtils.clamp(
-          mousePosition.x * controls.acceleration,
+          worldSpacePosition.z * controls.acceleration,
           -controls.maxForce,
           controls.maxForce
         ),
@@ -61,16 +59,12 @@ export function useCursorForce({ ref, throttle = 0 }: ForceProps) {
 
       ref.current.forEach((i: any) => {
         i.resetForces();
-        i.addForceAtPoint(
-          force,
-          { x: mousePosition.x, y: mousePosition.y, z: 0 },
-          true
-        );
+        i.addForceAtPoint(force, worldSpacePosition, true);
       });
     }
-  }, [ref, mousePosition, controls]);
+  }, [ref, controls, worldSpacePosition]);
 
   useEffect(() => {
     applyThrottle(applyForce);
-  }, [mousePosition, ref, applyThrottle, applyForce]);
+  }, [ref, applyThrottle, applyForce]);
 }
