@@ -1,9 +1,9 @@
-import { CuboidCollider, RigidBody } from "@react-three/rapier";
+import { CuboidCollider } from "@react-three/rapier";
 
 export type CustomColliderProps = {
-  scale: number[];
-  rotation: number[];
-  position: number[];
+  scale: [number, number, number];
+  rotation: [number, number, number];
+  position: [number, number, number];
 };
 
 export function CustomPlaneCollider({

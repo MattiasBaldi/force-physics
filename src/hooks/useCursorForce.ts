@@ -4,7 +4,7 @@ import { useControls } from "leva";
 import { useRaycaster } from "./useRaycaster";
 
 export type ForceProps = {
-  ref: React.RefObject<null>;
+  ref: React.RefObject<any>;
   throttle?: number;
 };
 

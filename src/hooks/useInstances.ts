@@ -26,6 +26,7 @@ export default function useInstances({
           (Math.random() - 0.5) * spawnDistance,
         ],
         rotation: [Math.random(), Math.random(), Math.random()],
+
         spawnDistance,
       })),
     [count, spawnDistance]

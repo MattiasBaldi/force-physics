@@ -1,0 +1,3 @@
+☐ Refactor and fix instances generation
+☐ Refactor raycaster to unproject camera to get world position more performant
+☐ Fix typescript errors

@@ -14,6 +14,7 @@ export function Experience({ isDebug }: ExperienceProps) {
         position: "fixed",
         width: "100vw",
         height: "100vh",
+        background: "black",
       }}
     >
       {isDebug ? <Perf position="bottom-left" /> : null}

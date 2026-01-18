@@ -9,13 +9,12 @@ export type TransformationProps = {
 
 export default function Plane(props: TransformationProps) {
   const key: string = Math.random().toString();
-  console.log(key);
 
   const controls = useControls({
     [`position${key}`]: props.position || [0, 0, 0],
     [`rotation${key}`]: props.rotation || [0, 0, 0],
     [`scale${key}`]: props.scale || [10, 10, 10], // Changed from [0,0,0] which would make it invisible
-  });
+  } as any) as any;
 
   return (
     <RigidBody colliders="cuboid">

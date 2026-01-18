@@ -11,10 +11,6 @@ export function useNormalizedMousePosition() {
       x: 0,
       y: 0,
     });
-  const [mousePosition, setMousePosition] = useState<MousePosition>({
-    x: 0,
-    y: 0,
-  });
 
   // Store the last mouse position
   const lastMousePosition = useRef<MousePosition>({ x: 0, y: 0 });
@@ -24,7 +20,6 @@ export function useNormalizedMousePosition() {
       x: event.clientX,
       y: event.clientY,
     };
-    setMousePosition(pos);
     lastMousePosition.current = pos;
 
     setNormalizedMousePosition({
